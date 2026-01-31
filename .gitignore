@@ -210,3 +210,4 @@ __marimo__/
 .vscode/
 *.pdf
 *.db
+product_list.py

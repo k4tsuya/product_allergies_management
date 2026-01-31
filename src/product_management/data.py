@@ -3,27 +3,14 @@
 from sqlalchemy.orm import Session
 
 from src.product_management.models import Allergen, Product
+from src.product_management.allergens import ALLERGENS
+
+
 
 # NVWA allergen list (simplified)
-ALLERGENS = [
-    ("gluten", "Cereals containing gluten", "Glutenbevattende granen"),
-    ("crustaceans", "Crustaceans", "Schaaldieren"),
-    ("eggs", "Eggs", "Eieren"),
-    ("fish", "Fish", "Vis"),
-    ("peanuts", "Peanuts", "Pinda's"),
-    ("soy", "Soybeans", "Sojabonen"),
-    ("milk", "Milk", "Melk"),
-    ("nuts", "Nuts", "Noten"),
-    ("celery", "Celery", "Selderij"),
-    ("mustard", "Mustard", "Mosterd"),
-    ("sesame", "Sesame seeds", "Sesamzaad"),
-    ("sulphites", "Sulphur dioxide and sulphites", "Zwaveldioxide en sulfieten"),
-    ("lupin", "Lupin", "Lupine"),
-    ("molluscs", "Molluscs", "Weekdieren"),
-]
 
 
-PRODUCTS = {
+SAMPLE_PRODUCTS = {
     "Frikandel": ["gluten", "soy", "mustard"],
     "Kroket": ["gluten", "milk"],
     "Bread": ["gluten"],
@@ -32,7 +19,9 @@ PRODUCTS = {
 
 def load_allergens(db: Session) -> None:
     """Insert allergens into the db if they don't exist."""
-    for code, en, nl in ALLERGENS:
+    for code, data in ALLERGENS.items():
+        en = data["en"]
+        nl = data["nl"]
         if db.query(Allergen).filter_by(code=code).first():
             continue
 
@@ -54,7 +43,7 @@ def load_products(db: Session) -> None:
         for allergen in db.query(Allergen).all()
     }
 
-    for name, allergen_codes in PRODUCTS.items():
+    for name, allergen_codes in SAMPLE_PRODUCTS.items():
         if db.query(Product).filter_by(name=name).first():
             continue
 
