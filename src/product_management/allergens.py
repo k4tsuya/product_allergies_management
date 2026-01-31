@@ -17,8 +17,8 @@ ALLERGENS = {
     "nuts": {"en": "Nuts", "nl": "Noten", "icon": ICON_DIR / "nuts.png"},
     "celery": {"en": "Celery", "nl": "Selderij", "icon": ICON_DIR / "celery.png"},
     "mustard": {"en": "Mustard", "nl": "Mosterd", "icon": ICON_DIR / "mustard.png"},
-    "sesame": {"en": "Sesame seeds", "nl": "Sesamzaad", "icon": ICON_DIR / "sesame.png"},
-    "sulphites": {"en": "Sulphur dioxide and sulphites", "nl": "Zwaveldioxide", "icon": ICON_DIR / "sulphites.png"},
+    "sesame": {"en": "Sesame", "nl": "Sesamzaad", "icon": ICON_DIR / "sesame.png"},
+    "sulphites": {"en": "Sulphites", "nl": "Sulfieten", "icon": ICON_DIR / "sulphites.png"},
     "lupin": {"en": "Lupin", "nl": "Lupine", "icon": ICON_DIR / "lupin.png"},
     "molluscs": {"en": "Molluscs", "nl": "Weekdieren", "icon": ICON_DIR / "mollucs.png"},
 }

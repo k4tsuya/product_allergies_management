@@ -7,7 +7,7 @@ from src.product_management.allergens import ALLERGENS
 
 # Set language for the output (Only English and Dutch supported.)
 # Use "en" or "nl"
-language: str = "en"
+language: str = "nl"
 
 
 
@@ -33,7 +33,7 @@ def generate_allergen_matrix_pdf(
 ) -> None:
     """Generate a PDF of all products and their allergens."""
 
-    allergen_labels = get_allergen_labels(language="nl")
+    allergen_labels = get_allergen_labels(language)
     allergen_codes = list(allergen_labels.keys())
 
     pdf = FPDF(orientation="L")

@@ -32,7 +32,7 @@ It is intended to become part of my **developer portfolio**, showcasing how I ap
 
 ---
 
-## 🧠 Domain Modeling (Important Design Choice)
+## 🧠 Domain Modeling
 
 A key design decision in this project is **how allergens are modeled**.
 
@@ -94,11 +94,20 @@ This data is inserted on application startup and is safe to run multiple times.
 
 ## 🚀 Running the Project
 
-### 1. Install dependencies
+### 1a. Install dependencies
 
 ```bash
 pip install fastapi uvicorn sqlalchemy pydantic
 ```
+
+### 1b. OPTIONAL: Set the preferred language for the generated pdf file.
+
+Set the language at the language variable in `pdf_generator.py` with `en` for English and `nl` for Dutch.
+
+```
+language: str = "en"
+```
+
 
 ### 2. Start the development server
 
@@ -120,6 +129,7 @@ FastAPI automatically provides interactive Swagger documentation.
 
 * `GET /products` – list products with their allergens
 * `GET /allergens` – list all known allergens
+* `GET /products/pdf` - generate a downloadable pdf file
 
 ---
 
