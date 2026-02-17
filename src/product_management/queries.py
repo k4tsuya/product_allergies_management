@@ -4,11 +4,11 @@ from src.product_management.models import Product, Allergen
 from sqlalchemy.orm import Session
 
 
-def list_products(db: Session):
+def list_products(db: Session) -> list[Product]:
     """Query all products."""
     return db.query(Product).all()
 
-def list_allergens(db: Session):
+def list_allergens(db: Session) -> list[Allergen]:
     """Query all allergens."""
     return db.query(Allergen).order_by(Allergen.description_en).all()
 

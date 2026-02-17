@@ -178,8 +178,6 @@ products = {
 ```
 
 
-Make sure this file is git-ignored (it is not included in this repository).
-
 When present, the application will automatically load this data instead of the sample data.
 If the file is not found, the system safely falls back to the sample dataset.
 
