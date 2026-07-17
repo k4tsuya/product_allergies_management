@@ -49,7 +49,7 @@ def load_products(db: Session) -> None:
     # To use real data, create products.py in the same directory of this module
     # and create a JSON structure like the SAMPLE_PRODUCTS.
     try:
-        from product_management.seed.products import products
+        from src.product_management.seed.products import products
         data_source = products
     except ImportError:
         print("Real data not found. Loading sample data...")
