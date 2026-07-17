@@ -3,8 +3,8 @@
 from pathlib import Path
 
 
-BASE_DIR = Path(__file__).resolve().parent
-ICON_DIR = BASE_DIR / "icons"
+BASE_DIR = Path(__file__).resolve().parent.parent
+ICON_DIR = BASE_DIR / "static" / "icons"
 
 ALLERGENS = {
     "gluten": {"en": "Gluten", "nl": "Gluten", "icon": ICON_DIR / "gluten.png"},

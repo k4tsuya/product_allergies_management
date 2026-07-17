@@ -1,26 +1,14 @@
 """Module containing models for the product management app."""
 
-from sqlalchemy import Column, ForeignKey, String, Table, create_engine
+from sqlalchemy import Column, ForeignKey, String, Table
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
     mapped_column,
     relationship,
-    sessionmaker,
 )
 
-protocol = "sqlite"
-db_name = "product_management.db"
-
-DATABASE_URL = f"{protocol}:///{db_name}"
-
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={"check_same_thread": False},
-)
-
-SessionLocal = sessionmaker(bind=engine)
-
+from src.product_management.core.database import engine, SessionLocal
 
 class Base(DeclarativeBase):
     pass

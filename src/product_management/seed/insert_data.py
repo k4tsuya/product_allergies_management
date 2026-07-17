@@ -3,7 +3,7 @@
 from sqlalchemy.orm import Session
 
 from src.product_management.models import Allergen, Product
-from src.product_management.allergens import ALLERGENS
+from src.product_management.seed.allergens import ALLERGENS
 
 
 
@@ -46,10 +46,10 @@ def load_products(db: Session) -> None:
         for allergen in db.query(Allergen).all()
     }
 
-    # To use real data, create product_list.py in the same directory of this module
+    # To use real data, create products.py in the same directory of this module
     # and create a JSON structure like the SAMPLE_PRODUCTS.
     try:
-        from src.product_management.product_list import products
+        from product_management.seed.products import products
         data_source = products
     except ImportError:
         print("Real data not found. Loading sample data...")

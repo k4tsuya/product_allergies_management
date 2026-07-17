@@ -3,7 +3,7 @@
 from collections.abc import Sequence, Callable
 from dataclasses import dataclass
 from fpdf import FPDF
-from src.product_management.allergens import ALLERGENS
+from src.product_management.seed.allergens import ALLERGENS
 
 
 TEXTS = {

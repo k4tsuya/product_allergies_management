@@ -3,14 +3,25 @@
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 from pathlib import Path
-from src.product_management.data import load_allergens, load_products
-from src.product_management.models import Base, SessionLocal, engine
+from src.product_management.seed.insert_data import load_allergens, load_products
+from src.product_management.core.database import SessionLocal, engine
+from src.product_management.models import Base
 from src.product_management.schemas import ProductResponse
 from src.product_management.queries import list_allergens, list_products, get_gluten_free_products, pdf_list_products
 from src.product_management.pdf_generator import AllergenMatrixPDF
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Snack Bar Product API")
+
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 def get_db():
