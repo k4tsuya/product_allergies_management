@@ -11,9 +11,12 @@ from src.product_management.queries import list_allergens, list_products, get_gl
 from src.product_management.pdf_generator import AllergenMatrixPDF
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+
 
 app = FastAPI(title="Snack Bar Product API")
 
+app.mount("/static", StaticFiles(directory="src/product_management/static"), name="static")
 
 
 app.add_middleware(

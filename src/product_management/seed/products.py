@@ -157,7 +157,7 @@ products = {
         "mustard",
         "soy"
     ],
-    "C.C.Cheese Nuggets": [
+    "C.C. Cheese Nuggets": [
         "gluten",
         "milk",
         "mustard",
