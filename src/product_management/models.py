@@ -1,6 +1,6 @@
 """Module containing models for the product management app."""
 
-from sqlalchemy import Column, ForeignKey, String, Table
+from sqlalchemy import Column, ForeignKey, Numeric, String, Table
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -41,6 +41,8 @@ class Product(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
+    units_per_box: Mapped[int] = mapped_column(nullable=True)
+    price: Mapped[float] = mapped_column(Numeric(10, 2), nullable=True)
 
     allergens: Mapped[list[Allergen]] = relationship(
         secondary=product_allergen,

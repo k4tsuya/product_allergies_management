@@ -1,18 +1,24 @@
-import { Link } from 'react-router-dom';
-import { t } from '../localization';
+import { useLanguage } from '../localization.jsx';
 
 function Navbar() {
+  const { language, setLanguage, t } = useLanguage();
+
   return (
     <nav className="navbar">
       <span className="navbar-brand">{t.brand}</span>
       <div className="navbar-links">
-        <Link to="/" className="navbar-link">Allergens</Link>
         
         <a  href="http://localhost:8000/products/pdf"
           className="navbar-link"
         >
           Download PDF
         </a>
+        <button
+          onClick={() => setLanguage(language === 'nl' ? 'en' : 'nl')}
+          className="language-switcher"
+        >
+          {language === 'nl' ? 'NL' : 'EN'}
+        </button>
       </div>
     </nav>
   );

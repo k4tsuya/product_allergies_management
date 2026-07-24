@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { language, t } from '../localization';
+import { useLanguage } from '../localization.jsx';
 
 function AllergensPage() {
+  const { language, t } = useLanguage();
   const [allergens, setAllergens] = useState([]);
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     Promise.all([
