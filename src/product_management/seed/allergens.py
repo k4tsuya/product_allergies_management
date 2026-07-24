@@ -20,5 +20,5 @@ ALLERGENS = {
     "sesame": {"en": "Sesame", "nl": "Sesam", "icon": ICON_DIR / "sesame.png"},
     "sulphites": {"en": "Sulphites", "nl": "Sulfieten", "icon": ICON_DIR / "sulphites.png"},
     "lupin": {"en": "Lupin", "nl": "Lupine", "icon": ICON_DIR / "lupin.png"},
-    "molluscs": {"en": "Molluscs", "nl": "Weekdier", "icon": ICON_DIR / "mollucs.png"},
+    "molluscs": {"en": "Molluscs", "nl": "Weekdier", "icon": ICON_DIR / "molluscs.png"},
 }
