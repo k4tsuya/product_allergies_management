@@ -28,15 +28,16 @@ function AllergensPage() {
           <thead>
             <tr>
               <th className="matrix-corner">Product</th>
-              {allergens.map((allergen) => (
+                {allergens.map((allergen) => (
                 <th key={allergen.id} className="matrix-allergen-header">
-                  <img
+                    <img
                     src={`http://localhost:8000/static/icons/${allergen.code}.png`}
                     alt={language === 'nl' ? allergen.description_nl : allergen.description_en}
+                    title={language === 'nl' ? allergen.description_nl : allergen.description_en}
                     className="matrix-icon"
-                  />
+                    />
                 </th>
-              ))}
+                ))}
             </tr>
           </thead>
           <tbody>
@@ -62,7 +63,7 @@ function AllergensPage() {
         <div className="legend">
           <span className="legend-item">
             <span className="legend-dot">●</span>
-            {language === 'nl' ? 'Bevat dit allergeen' : 'Contains this allergen'}
+            {language === 'nl' ? ' Bevat dit allergeen' : ' Contains this allergen'}
           </span>
         </div>
 
