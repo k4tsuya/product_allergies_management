@@ -1,7 +1,6 @@
 """Module containing schemas for the product management app."""
 
-from pydantic import BaseModel
-
+from pydantic import BaseModel, ConfigDict
 
 class AllergenResponse(BaseModel):
     id: int
@@ -9,8 +8,7 @@ class AllergenResponse(BaseModel):
     description_en: str
     description_nl: str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProductResponse(BaseModel):
@@ -18,8 +16,7 @@ class ProductResponse(BaseModel):
     name: str
     allergens: list[AllergenResponse]
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class ProductAllergenView(BaseModel):
