@@ -52,3 +52,10 @@ def test_download_pdf_endpoint_returns_pdf_file(client, db_session):
 
     assert response.status_code == 200
     assert response.headers["content-type"] == "application/pdf"
+    
+def test_health_check_returns_ok(client):
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "ok"
+    assert response.json()["database"] == "ok"

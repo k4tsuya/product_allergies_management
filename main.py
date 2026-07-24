@@ -2,6 +2,7 @@
 
 from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI
+from sqlalchemy import text
 from sqlalchemy.orm import Session
 from pathlib import Path
 from src.product_management.seed.insert_data import load_allergens, load_meat_types, load_products
@@ -51,6 +52,17 @@ def get_db():
     finally:
         db.close()
 
+
+@app.get("/health")
+def health_check(db: Session = Depends(get_db)):
+    """Report whether the API and database are reachable."""
+    try:
+        db.execute(text("SELECT 1"))
+        db_status = "ok"
+    except Exception:
+        db_status = "unreachable"
+
+    return {"status": "ok", "database": db_status}
 
 @app.get("/products", response_model=list[ProductResponse])
 def list_all_products(db: Session = Depends(get_db)):
