@@ -227,3 +227,9 @@ body {
   border-color: #FAFAF8;
   color: #FAFAF8;
 }
+
+.navbar-link-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}

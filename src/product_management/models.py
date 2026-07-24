@@ -21,6 +21,13 @@ product_allergen = Table(
     Column("allergen_id", ForeignKey("allergens.id"), primary_key=True),
 )
 
+product_meat_type = Table(
+    "product_meat_type",
+    Base.metadata,
+    Column("product_id", ForeignKey("products.id"), primary_key=True),
+    Column("meat_type_id", ForeignKey("meat_types.id"), primary_key=True),
+)
+
 
 class Allergen(Base):
     __tablename__ = "allergens"
@@ -36,6 +43,20 @@ class Allergen(Base):
     )
 
 
+class MeatType(Base):
+    __tablename__ = "meat_types"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    code: Mapped[str] = mapped_column(String(100), unique=True, nullable=False)
+    description_en: Mapped[str] = mapped_column(String(200), nullable=False)
+    description_nl: Mapped[str] = mapped_column(String(200), nullable=False)
+
+    products: Mapped[list["Product"]] = relationship(
+        secondary=product_meat_type,
+        back_populates="meat_types",
+    )
+
+
 class Product(Base):
     __tablename__ = "products"
 
@@ -46,5 +67,9 @@ class Product(Base):
 
     allergens: Mapped[list[Allergen]] = relationship(
         secondary=product_allergen,
+        back_populates="products",
+    )
+    meat_types: Mapped[list["MeatType"]] = relationship(
+        secondary=product_meat_type,
         back_populates="products",
     )
