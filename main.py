@@ -4,12 +4,15 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 from pathlib import Path
-from src.product_management.seed.insert_data import load_allergens, load_products
+from src.product_management.seed.insert_data import load_allergens, load_meat_types, load_products
 from src.product_management.core.database import SessionLocal, engine
 from src.product_management.models import Base
 from src.product_management.schemas import ProductResponse
 from src.product_management.queries import list_allergens, list_products, get_gluten_free_products, pdf_list_products
 from src.product_management.pdf_generator import AllergenMatrixPDF
+from src.product_management.core.config import ENABLE_MEAT_TRACKING
+
+
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -21,6 +24,8 @@ async def lifespan(app: FastAPI):
 
     with SessionLocal() as db:
         load_allergens(db)
+        if ENABLE_MEAT_TRACKING:
+            load_meat_types(db)
         load_products(db)
 
     yield

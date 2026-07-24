@@ -4,7 +4,8 @@ from sqlalchemy.orm import Session
 
 from src.product_management.models import Allergen, Product
 from src.product_management.seed.allergens import ALLERGENS
-
+from src.product_management.seed.meat_types import MEAT_TYPES
+from src.product_management.models import MeatType
 
 
 # NVWA allergen list (simplified)
@@ -27,6 +28,25 @@ def load_allergens(db: Session) -> None:
 
         db.add(
             Allergen(
+                code=code,
+                description_en=en,
+                description_nl=nl,
+            )
+        )
+
+    db.commit()
+
+
+def load_meat_types(db: Session) -> None:
+    """Insert meat types into the db if they don't exist."""
+    for code, data in MEAT_TYPES.items():
+        en = data["en"]
+        nl = data["nl"]
+        if db.query(MeatType).filter_by(code=code).first():
+            continue
+
+        db.add(
+            MeatType(
                 code=code,
                 description_en=en,
                 description_nl=nl,
