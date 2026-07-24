@@ -1,5 +1,6 @@
 """Main module for the product management app."""
 
+from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI
 from sqlalchemy.orm import Session
 from pathlib import Path
@@ -14,7 +15,18 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 
-app = FastAPI(title="Snack Bar Product API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    Base.metadata.create_all(bind=engine)
+
+    with SessionLocal() as db:
+        load_allergens(db)
+        load_products(db)
+
+    yield
+
+
+app = FastAPI(title="Snack Bar Product API", lifespan=lifespan)
 
 app.mount("/static", StaticFiles(directory="src/product_management/static"), name="static")
 
@@ -33,15 +45,6 @@ def get_db():
         yield db
     finally:
         db.close()
-
-
-@app.on_event("startup")
-def on_startup() -> None:
-    Base.metadata.create_all(bind=engine)
-
-    with SessionLocal() as db:
-        load_allergens(db)
-        load_products(db)
 
 
 @app.get("/products", response_model=list[ProductResponse])
@@ -68,11 +71,8 @@ OUTPUT_DIR.mkdir(exist_ok=True)
 
 
 @app.get("/products/pdf", response_class=FileResponse)
-def download_products_pdf(db: Session = Depends(get_db)):
+def download_products_pdf(language: str = "nl", db: Session = Depends(get_db)):
     """Save a PDF of all products and their allergens."""
-
-    # Set language with "en" for English or "nl" for Dutch
-    language = "nl"
 
     products = pdf_list_products(db)
     file_path = OUTPUT_DIR / "product_allergens.pdf"

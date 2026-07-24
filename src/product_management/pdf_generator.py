@@ -3,6 +3,7 @@
 from collections.abc import Sequence, Callable
 from dataclasses import dataclass
 from fpdf import FPDF
+from fpdf.enums import XPos, YPos
 from src.product_management.seed.allergens import ALLERGENS
 
 
@@ -51,13 +52,13 @@ class AllergenMatrixPDF(FPDF):
         self.add_page()
 
         # Title
-        self.set_font("Arial", "B", 12)
-        self.cell(0, 10, f"{self.texts["title"]}", ln=True)
+        self.set_font("helvetica", "B", 12)
+        self.cell(0, 10, f"{self.texts["title"]}", new_x=XPos.LMARGIN, new_y=YPos.NEXT)
 
         self.ln(3)
 
         # Icon header row
-        self.set_font("Arial", "B", 8)
+        self.set_font("helvetica", "B", 8)
         self.cell(product_col_width, row_height, "", border=1)
 
         for code in allergen_codes:
@@ -89,7 +90,7 @@ class AllergenMatrixPDF(FPDF):
         self.ln()
 
         # Reset font for rows
-        self.set_font("Arial", size=8)
+        self.set_font("helvetica", size=8)
 
     # ---------- Page break helper ----------
     def check_page_break(
@@ -103,8 +104,8 @@ class AllergenMatrixPDF(FPDF):
     # ---------- Footer ----------
     def footer(self) -> None:
         self.set_y(-15)
-        self.set_font("Arial", "I", 8)
-        self.cell(0, 10, f"{self.texts["footer"]} {self.page_no()} / {{nb}}", ln=True, align="C")
+        self.set_font("helvetica", "I", 8)
+        self.cell(0, 10, f"{self.texts["footer"]} {self.page_no()} / {{nb}}", new_x=XPos.LMARGIN, new_y=YPos.NEXT, align="C")
 
     # ---------- Main generator ----------
     def generate_allergen_matrix_pdf(
@@ -146,7 +147,7 @@ class AllergenMatrixPDF(FPDF):
                 ),
             )
 
-            self.set_fill_color((255, 255, 255) if fill else (235, 235, 235))
+            self.set_fill_color((255, 255, 255) if fill else (235, 235, 235)) 
             fill = not fill
 
             self.cell(
@@ -162,7 +163,7 @@ class AllergenMatrixPDF(FPDF):
                 if code in product.allergens:
                     self.set_font('ZapfDingbats', '', 12)
                 else:
-                    self.set_font('Arial', '', 8)
+                    self.set_font('helvetica', '', 8)
 
                 mark = "4" if code in product.allergens else ""
                 self.cell(
@@ -173,7 +174,7 @@ class AllergenMatrixPDF(FPDF):
                     align="C",
                     fill=True,
                 )
-            self.set_font('Arial', '', 8)
+            self.set_font('helvetica', '', 8)
 
 
             self.ln()
