@@ -211,3 +211,4 @@ __marimo__/
 *.pdf
 *.db
 src/product_management/seed/products.py
+src/product_management/seed/product_meat_types.py

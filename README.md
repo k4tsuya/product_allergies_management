@@ -53,6 +53,8 @@ This approach:
 * Avoids fragile database schemas
 * Makes the system easy to extend in the future (e.g. "may contain traces of")
 
+The same pattern (a dedicated reference table + many‑to‑many relationship) is reused for **meat types** — an optional feature for tracking which meats (pork, beef, chicken, etc.) are present in a product. See **Feature Flags** below.
+
 ---
 
 ## 🧱 Tech Stack
@@ -69,6 +71,7 @@ I intentionally chose this tech stack to **learn and explore different tools** b
 **Frontend**
 * **React** – component-based UI library
 * **Vite** – frontend build tool and dev server
+* **React Router** – client-side routing setup (single route: the allergen matrix)
 
 Although I have previous experience with **Django + DRF**, this project focuses on:
 
@@ -84,17 +87,37 @@ Although I have previous experience with **Django + DRF**, this project focuses 
 ```
 src/product_management/
 ├── core/
-│   └── database.py       # DB engine/session setup
+│   ├── database.py       # DB engine/session setup
+│   └── config.py           # Feature flags (e.g. ENABLE_MEAT_TRACKING)
 ├── models.py               # SQLAlchemy models
 ├── schemas.py               # Pydantic schemas
 ├── queries.py                # DB query functions
 ├── seed/
 │   ├── insert_data.py         # Functions that insert data into the DB
-│   ├── products.py             # Real product data (gitignored, see below)
-│   └── allergens.py            # NVWA allergen reference data
+│   ├── products.py             # Real product+allergen data (gitignored, see below)
+│   ├── product_meat.py          # Real product+meat data (gitignored, optional)
+│   ├── allergens.py              # NVWA allergen reference data
+│   └── meat_types.py              # Meat type reference data
 ├── pdf_generator.py           # PDF export logic
 └── static/
     └── icons/                # Allergen icons, served via FastAPI static files
+```
+
+---
+
+## 🗂️ Project Structure (frontend)
+
+```
+frontend/src/
+├── components/
+│   ├── Navbar.jsx        # Top navigation bar with Allergens link + PDF download
+│   └── Footer.jsx          # Page footer
+├── pages/
+│   └── AllergensPage.jsx    # "/" — allergen x product matrix view, plus legend
+├── localization.js           # Central language setting and translated text
+├── App.jsx                    # Assembles layout and defines routes
+├── App.css                     # App-wide styling
+└── main.jsx                     # App entry point, wraps App in BrowserRouter
 ```
 
 ---
@@ -118,6 +141,20 @@ The application automatically seeds:
 * **Fishstick** → fish
 
 This data is inserted on application startup and is safe to run multiple times.
+
+---
+
+## 🚩 Feature Flags
+
+Some features are optional, since not every business using this project needs them.
+
+Feature flags live in `src/product_management/core/config.py`:
+
+```python
+ENABLE_MEAT_TRACKING = False  # Set to True to enable meat tracking features
+```
+
+**Meat tracking** links products to the meat types they contain (pork, beef, chicken, turkey, horse, fish, lamb), using the same many‑to‑many pattern as allergens. It's `False` by default — when disabled, meat reference data is never seeded and no meat types get assigned to products, but the underlying database tables still exist (created for every model regardless of the flag). Setting this to `True` and restarting the app (with a fresh database, see below) enables the feature.
 
 ---
 
@@ -170,6 +207,15 @@ Both servers must be running at the same time for the frontend to fetch data fro
 
 ---
 
+## 🧭 Frontend Pages
+
+* `/` – **Allergen Matrix** page, a table with products listed down the left and allergens (with icons) across a sticky header row, marking which products contain which allergens. Below the table sits a legend explaining the marker, plus a labeled key listing every allergen by name and icon.
+* **Download PDF** – a navbar link that triggers the backend's `/products/pdf` endpoint directly, downloading the same allergen matrix as a PDF file
+
+The dedicated product list page was removed in favor of the matrix view, since it already conveys the same information (product names + their allergens) more directly.
+
+---
+
 ## 📚 What I Learned From This Project
 
 * How to model **many‑to‑many relationships** correctly
@@ -178,6 +224,9 @@ Both servers must be running at the same time for the frontend to fetch data fro
 * React fundamentals: components, props, state, effects, conditional rendering
 * Connecting a React frontend to a FastAPI backend (CORS, fetch, serving static files)
 * Structuring a growing codebase into clear, single-purpose modules
+* Client-side routing with React Router, and structuring an app into pages vs. reusable components
+* Combining data from multiple API endpoints in the frontend (products + allergens) to build a matrix view
+* CSS Grid and sticky positioning for responsive, scrollable layouts
 
 ---
 
@@ -195,8 +244,8 @@ Planned extensions include:
 
 * Product creation via API (`POST /products`)
 * Support for **"may contain traces of"** allergens
-* Search / filter functionality on the frontend
-* Runtime language switching (Dutch/English toggle) instead of a fixed setting
+* Search / filter functionality on the products page
+* Runtime language switching (Dutch/English toggle) instead of a fixed setting in `localization.js`
 
 ---
 
@@ -234,6 +283,27 @@ This approach allows:
 * Avoiding configuration or environment variables for simple setups
 
 **Note:** `src/product_management/seed/products.py` is listed in `.gitignore` to keep real business data out of version control.
+
+### Using real meat type data (optional)
+
+If **meat tracking** is enabled (see **Feature Flags** above), you can similarly provide real per-product meat data via a file excluded from version control.
+
+Create a file at:
+
+```
+src/product_management/seed/product_meat.py
+```
+
+Define a variable called `product_meat` with the same structure as the sample data:
+
+```python
+product_meat = {
+    "Example product": ["pork", "beef"],
+    "Another product": [],
+}
+```
+
+If this file isn't present, the application falls back to a small internal sample dataset. `src/product_management/seed/product_meat.py` is also listed in `.gitignore`.
 
 ---
 
